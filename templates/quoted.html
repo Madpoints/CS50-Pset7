@@ -1,15 +1,22 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Quoted
+    Quote
 {% endblock %}
 
 {% block main %}
-    <!--<form action="/quote" method="post">-->
-        <div class="form-group">
-            <p>TODO: get stock quote</p>
-            <!--<input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="Stock symbol" type="text"/>-->
+        <div>
+            <table style="width:100%">
+                <tr>
+                    <th>Name</th>
+                    <th>Price($)</th>
+                    <th>Symbol</th>
+                </tr>
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{price}}</td>
+                    <td>{{symbol}}</td>
+                </tr>
+            </table>
         </div>
-        <!--<button class="btn btn-primary" type="submit">Look up</button>-->
-    <!--</form>-->
 {% endblock %}
