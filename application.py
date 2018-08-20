@@ -40,21 +40,21 @@ db = SQL("sqlite:///finance.db")
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    return apology("TODO index")
 
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    return apology("TODO buy")
 
 
 @app.route("/history")
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    return apology("TODO history")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -109,7 +109,11 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method == "POST":
+        return render_template("quoted.html")
+
+    else:
+        return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -129,12 +133,22 @@ def register():
         elif request.form.get("password") != request.form.get("confirmation"):
             return apology("password and confirmation do not match", 403)
 
-        print("POST:")
-        print(" Username:" + request.form.get("username"))
-        print(" Password:" + request.form.get("password"))
-        print(" Confirm:" + request.form.get("confirmation"))
+        elif len(db.execute("SELECT username FROM users WHERE username = :username",
+                          username=request.form.get("username"))) > 0:
+            return apology("username already exists", 403)
+
+        hash = generate_password_hash(request.form.get("password"))
+
+        db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",
+                    username=request.form.get("username"), hash=hash)
+
+        rows = db.execute("SELECT * FROM users WHERE username = :username",
+                          username=request.form.get("username"))
+
+        session["user_id"] = rows[0]["id"]
 
         return redirect("/")
+
     else:
         return render_template("register.html")
 
@@ -143,7 +157,7 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+    return apology("TODO sell")
 
 
 def errorhandler(e):
